@@ -1,4 +1,4 @@
-import {SessionCompanyContact ,SessionItem, SessionResponse} from "@/libs/interfaces";
+import {SessionCompanyContact ,SessionItem, SessionResponse} from "./interfaces";
 
 export default async function getSessions(): Promise<SessionResponse> {
     const url = "http://localhost:5000/api/v1/sessions/";
