@@ -24,7 +24,7 @@ export default function TopMenu() {
                     </Link>
                 )}
                 <TopMenuItem title="My Booking" href="/mybooking" count={bookItems.length} />
-                
+                <TopMenuItem title='Company' href='/company'/>
             </div>
             
             {/* Right section - Logo, Brand, and Booking */}
