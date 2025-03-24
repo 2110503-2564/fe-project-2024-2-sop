@@ -79,7 +79,7 @@ export default function HistoryPanel({ isLoggedIn }: HistoryPanelProps) {
 
     return (
         <div className="bg-white rounded-lg shadow p-6 h-[275px] flex flex-col">
-            <h2 className="font-medium mb-4 text-center sticky top-0 bg-white">ประวัติการจองของคุณ</h2>
+            <h2 className="font-medium mb-4 text-center sticky top-0 bg-white text-2xl">ประวัติการจอง</h2>
             
             {userIsLoggedIn ? (
                 <div className="flex-1 overflow-hidden flex flex-col">
