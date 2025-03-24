@@ -5,7 +5,7 @@ export default async function CompanyCatalog({companyJson}:{companyJson:Object})
     const companyJsonReady = await companyJson    
     return(
         <>
-        Explore {companyJsonReady.count} models in our catalog
+        Explore {companyJsonReady.count} companies in our JobFair
         
         <div style={{margin:"20px",display:"flex",
                 flexDirection:"row",alignContent:"space-around",
