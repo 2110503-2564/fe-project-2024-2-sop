@@ -51,7 +51,7 @@ export default function Navbar() {
                             Booking
                         </Link>
                         <Link 
-                            href="/profile" 
+                            href="/profile"
                             className="text-[#d4d4d4] hover:text-[#007acc] transition-colors duration-200 font-medium"
                         >
                             Profile
