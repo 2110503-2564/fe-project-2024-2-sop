@@ -75,3 +75,30 @@ export interface ApiResponse {
     pagination: object;
     data: Booking[];
 }
+
+export interface SessionItem {
+    _id: string;
+    sessionName: string;
+    jobPosition: string;
+    jobDescription: string;
+    startDate: Date;
+    endDate: Date;
+    company: string;
+    companiess: SessionCompanyContact;
+    __v: number;
+    id: string;
+}
+
+export interface SessionCompanyContact{
+    _id:string;
+    name:string;
+    tel:string;
+    email:string;
+    website:string;
+    id:string;
+}
+
+export interface SessionResponse {
+    success: boolean;
+    data: SessionItem;
+}
