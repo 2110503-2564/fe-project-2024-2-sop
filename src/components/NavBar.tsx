@@ -2,13 +2,16 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useSession } from "next-auth/react";
+import { useSession ,signOut} from "next-auth/react";
 import { useAppSelector } from '@/redux/store';
 
 export default function Navbar() {
     const { data: session } = useSession();
-    const bookItems = useAppSelector((state) => state.bookSlice.bookItems);
-    
+    const handleSignOut = () => {
+        signOut({
+            callbackUrl: '/', // Redirect to the home page after sign out
+        });
+    };
     return (
         <nav className="w-full bg-white p-4 shadow-sm">
             <div className="max-w-6xl mx-auto flex items-center justify-between">
@@ -22,11 +25,13 @@ export default function Navbar() {
                     <Link href="/booking" className="text-gray-600 hover:text-gray-800">Booking</Link>
                     <Link href="/profile" className="text-gray-600 hover:text-gray-800">Profile</Link>
                     {session ? (
-                        <Link href="/api/auth/signout" className="text-gray-600 hover:text-gray-800">
+                       <button 
+                            onClick={handleSignOut} // Use button to trigger sign out
+                            className="text-gray-600 hover:text-gray-800">
                             Logout
-                        </Link>
+                        </button>
                     ) : (
-                        <Link href="/api/auth/signin" className="text-gray-600 hover:text-gray-800">
+                        <Link href="/login" className="text-gray-600 hover:text-gray-800">
                             Login
                         </Link>
                     )}

@@ -1,4 +1,4 @@
-import Card from "./Card";
+import Card from "./CompanyCard";
 import {VenueItem, VenueJson} from "@/libs/interfaces";
 import Link from "next/link";
 

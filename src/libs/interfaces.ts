@@ -30,3 +30,16 @@ export interface BookingItem {
     venue: string;
     bookDate: string;
 }
+export interface User {
+    _id: string;
+    name: string;
+    email: string;
+    role: string;
+    token: string;
+    tel?: string;          // Make tel optional
+    affiliate?: string;    // Make affiliate optional
+    password?: string;
+    image? : string;     // Make password optional
+    createdAtts?: any[];   // Make createdAtts optional
+  }
+  
