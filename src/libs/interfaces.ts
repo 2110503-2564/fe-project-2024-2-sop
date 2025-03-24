@@ -39,7 +39,39 @@ export interface User {
     tel?: string;          // Make tel optional
     affiliate?: string;    // Make affiliate optional
     password?: string;
-    image? : string;     // Make password optional
+    image?: string;     // Make password optional
     createdAtts?: any[];   // Make createdAtts optional
-  }
-  
+}
+export interface Company {
+    _id: string;
+    name?: string;
+    address?: string;
+    tel?: string;
+    website?: string;
+    id?: string;
+}
+
+export interface InterviewSession {
+    _id: string;
+    sessionName?: string;
+    jobPosition?: string;
+    jobDescription?: string;
+    id?: string;
+}
+
+export interface Booking {
+    _id: string;
+    bookingDate: string;
+    user: User | string;
+    company: Company | string;
+    interviewSession: InterviewSession | string;
+    interviewsessions?: InterviewSession[];
+    createdAt: string;
+    id?: string;
+}
+export interface ApiResponse {
+    success: boolean;
+    count: number;
+    pagination: object;
+    data: Booking[];
+}

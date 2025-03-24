@@ -2,50 +2,11 @@
 
 import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
+import { ApiResponse, Booking, Company, InterviewSession, User } from '@/libs/interfaces';
+import { getBookings } from '@/libs/getBookings';
 
 interface HistoryPanelProps {
-    isLoggedIn?: boolean; // Making this optional since we'll check session
-}
-
-interface User {
-    _id: string;
-    name?: string;
-    email?: string;
-}
-
-interface Company {
-    _id: string;
-    name?: string;
-    address?: string;
-    tel?: string;
-    website?: string;
-    id?: string;
-}
-
-interface InterviewSession {
-    _id: string;
-    sessionName?: string;
-    jobPosition?: string;
-    jobDescription?: string;
-    id?: string;
-}
-
-interface Booking {
-    _id: string;
-    bookingDate: string;
-    user: User | string;
-    company: Company | string;
-    interviewSession: InterviewSession | string;
-    interviewsessions?: InterviewSession[];
-    createdAt: string;
-    id?: string;
-}
-
-interface ApiResponse {
-    success: boolean;
-    count: number;
-    pagination: object;
-    data: Booking[];
+    isLoggedIn?: boolean;
 }
 
 export default function HistoryPanel({ isLoggedIn }: HistoryPanelProps) {
@@ -55,7 +16,6 @@ export default function HistoryPanel({ isLoggedIn }: HistoryPanelProps) {
     const [error, setError] = useState<string | null>(null);
     const [hasBookings, setHasBookings] = useState<boolean>(false);
 
-    // Use either provided isLoggedIn prop or check session status
     const userIsLoggedIn = isLoggedIn !== undefined ? isLoggedIn : (status === 'authenticated');
 
     useEffect(() => {
@@ -71,24 +31,8 @@ export default function HistoryPanel({ isLoggedIn }: HistoryPanelProps) {
         setError(null);
 
         try {
-            // Include the bearer token from the session
-            const response = await fetch('http://localhost:5000/api/v1/bookings', {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${session.user.token}`
-                },
-                credentials: 'include'
-            });
-
-            if (!response.ok) {
-                // Get more detailed error information
-                const errorText = await response.text();
-                console.error('Response error:', response.status, errorText);
-                throw new Error(`Failed to fetch booking history: ${response.status} ${response.statusText}`);
-            }
-
-            const data: ApiResponse = await response.json();
-
+            const data = await getBookings(session.user.token);
+            
             if (data.data && data.data.length > 0) {
                 setBookings(data.data);
                 setHasBookings(true);
@@ -97,12 +41,14 @@ export default function HistoryPanel({ isLoggedIn }: HistoryPanelProps) {
             }
         } catch (err) {
             console.error('Error fetching bookings:', err);
-            setError('ไม่สามารถโหลดประวัติการจองได้ กรุณาลองใหม่อีกครั้ง');
+            const errorMessage = err instanceof Error ? err.message : 'เกิดข้อผิดพลาดที่ไม่คาดคิด';
+            setError(errorMessage);
         } finally {
             setIsLoading(false);
         }
     };
 
+    // ... rest of the component remains the same ...
     const formatDate = (dateString: string) => {
         const date = new Date(dateString);
         return date.toLocaleDateString('th-TH', {
@@ -122,11 +68,9 @@ export default function HistoryPanel({ isLoggedIn }: HistoryPanelProps) {
     };
 
     const getSessionTitle = (booking: Booking) => {
-        // Check for interviewsessions array first (based on your API response)
         if (booking.interviewsessions && booking.interviewsessions.length > 0) {
             return booking.interviewsessions[0].sessionName || 'รอบสัมภาษณ์';
         }
-        // Fall back to the interviewSession object if available
         if (typeof booking.interviewSession === 'object' && booking.interviewSession !== null) {
             return (booking.interviewSession as InterviewSession).sessionName || 'รอบสัมภาษณ์';
         }
@@ -134,7 +78,7 @@ export default function HistoryPanel({ isLoggedIn }: HistoryPanelProps) {
     };
 
     return (
-        <div className="bg-white rounded-lg shadow p-6 h-full flex flex-col">
+        <div className="bg-white rounded-lg shadow p-6 h-[275px] flex flex-col">
             <h2 className="font-medium mb-4 text-center sticky top-0 bg-white">ประวัติการจองของคุณ</h2>
             
             {userIsLoggedIn ? (
