@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Companycard from "./CompanyCard";
 
-export default async function CarCatalog({companyJson}:{companyJson:Object}){
+export default async function CompanyCatalog({companyJson}:{companyJson:Object}){
     const companyJsonReady = await companyJson    
     return(
         <>
@@ -16,7 +16,7 @@ export default async function CarCatalog({companyJson}:{companyJson:Object}){
                     companyJsonReady.data.map((companyItem:Object)=>(
                         <Link href={`/company/${companyItem.id}`}
                         className="w-1/5">
-                        <Companycard companyName={companyItem.name} imgSrc={"/img.jpg"}/>
+                        <Companycard companyName={companyItem.name} imgSrc={companyItem.company_picture}/>
                         </Link>
                     
                     ))
