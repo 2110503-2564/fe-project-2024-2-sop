@@ -5,7 +5,7 @@ import FeatureCards from "@/components/FeatureCardPanel";
 import HistoryPanel from "@/components/HistoryPanel";
 import { useSession } from "next-auth/react";
 import Banner from "@/components/Banner";
-import UserInfoPanel from "@/components/UserInfoPanel";  // Import the new UserInfoPanel
+import UserInfoPanel from "@/components/UserInfoPanel";
 
 export default function Home() {
     const { data: session } = useSession();
@@ -17,7 +17,8 @@ export default function Home() {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     {!session ? <LoginPanel /> : <UserInfoPanel user={session.user} />}
                     <FeatureCards />
-                    <HistoryPanel isLoggedIn={!!session} />
+                    {/* Pass user prop to HistoryPanel */}
+                    <HistoryPanel user={session?.user} />
                 </div>
             </div>
         </main>

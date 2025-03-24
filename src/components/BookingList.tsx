@@ -1,51 +1,61 @@
 "use client";
 
-import {AppDispatch, useAppSelector} from "@/redux/store";
-import {useDispatch} from "react-redux";
-import {removeBooking} from "@/redux/features/bookSlice";
-import {Card, CardContent, Typography, Button, CardActions} from "@mui/material";
-import {BookingItem} from "@/libs/interfaces";
+import React, { useEffect, useState } from "react";
+import BookingItem from "./BookingItem";
+import { getBookings } from "@/libs/getBookings";
+import { Booking } from "@/libs/interfaces";
 
-export default function BookingList() {
-    const bookItems = useAppSelector((state) => state.bookSlice.bookItems);
-    const dispatch = useDispatch<AppDispatch>();
-
-    return (
-        <div className="space-y-4 p-4">
-            {bookItems.length === 0 ? (
-                <div className="bg-slate-200 rounded px-5 py-2 text-center">
-                    <div className="text-md">No Venue Booking</div>
-                </div>
-            ) : (
-                bookItems.map((bookingItem: BookingItem) => (
-                    <Card key={`${bookingItem.nameLastname}-${bookingItem.bookDate}`} className="shadow-lg rounded-lg p-4 transition-transform transform">
-                        <CardContent>
-                            <Typography variant="h6" component="div" className="font-semibold">
-                                {bookingItem.nameLastname}
-                            </Typography>
-                            <Typography variant="body2" color="textSecondary">
-                                Contact: {bookingItem.tel}
-                            </Typography>
-                            <Typography variant="body2" color="textSecondary">
-                                Venue: {
-                                    bookingItem.venue === "Bloom" ? "The Bloom Pavilion" :
-                                    bookingItem.venue === "Spark" ? "Spark Space" :
-                                    bookingItem.venue === "GrandTable" ? "The Grand Table" :
-                                    bookingItem.venue
-                                }
-                            </Typography>
-                            <Typography variant="body2" color="textSecondary">
-                                Date: {bookingItem.bookDate}
-                            </Typography>
-                        </CardContent>
-                        <CardActions>
-                            <Button size="small" color="error" onClick={() => dispatch(removeBooking(bookingItem))} variant="contained" sx={{borderRadius: "20px"}}>
-                                Cancel Booking
-                            </Button>
-                        </CardActions>
-                    </Card>
-                ))
-            )}
-        </div>
-    );
+interface BookingListProps {
+  token: string;
 }
+
+const BookingList: React.FC<BookingListProps> = ({ token }) => {
+  const [bookings, setBookings] = useState<Booking[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchBookings = async () => {
+      try {
+        const response = await getBookings(token);
+        // Directly use the response as it contains the bookings array
+        setBookings(response.data ?? []); 
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Failed to fetch bookings");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (token) {
+      fetchBookings();
+    }
+  }, [token]);
+
+  if (loading) {
+    return <div className="p-4 text-gray-600">Loading bookings...</div>;
+  }
+
+  if (error) {
+    return <div className="p-4 text-red-500">{error}</div>;
+  }
+
+  return (
+    <div className="bg-white p-4 rounded-lg shadow-md">
+      <h2 className="text-xl font-bold mb-4">Your Bookings</h2>
+      {bookings.length === 0 ? (
+        <p className="text-gray-600">No bookings found</p>
+      ) : (
+        bookings.map((booking) => (
+          <BookingItem
+            key={booking._id}
+            title={booking.company?.name || "Company"}
+            description={booking.interviewSession?.sessionName || "Interview Session"}
+          />
+        ))
+      )}
+    </div>
+  );
+};
+
+export default BookingList;

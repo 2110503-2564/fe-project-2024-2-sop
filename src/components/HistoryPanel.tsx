@@ -1,54 +1,75 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useSession } from 'next-auth/react';
 import { ApiResponse, Booking, Company, InterviewSession, User } from '@/libs/interfaces';
 import { getBookings } from '@/libs/getBookings';
+import { fetchUserProfile } from '@/libs/getUser';
 
 interface HistoryPanelProps {
-    isLoggedIn?: boolean;
+    user?: any;  // Use any to match NextAuth user type
 }
 
-export default function HistoryPanel({ isLoggedIn }: HistoryPanelProps) {
-    const { data: session, status } = useSession();
+interface UserProfileData {
+    name: string;
+    email: string;
+    role: string;
+    // Add other fields as needed
+}
+
+export default function HistoryPanel({ user }: HistoryPanelProps) {
+    const [userData, setUserData] = useState<UserProfileData | null>(null);
     const [bookings, setBookings] = useState<Booking[]>([]);
-    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     const [hasBookings, setHasBookings] = useState<boolean>(false);
-
-    const userIsLoggedIn = isLoggedIn !== undefined ? isLoggedIn : (status === 'authenticated');
+    
+    // Get token from user object (assuming NextAuth)
+    const token = user?.token;
+    const userIsLoggedIn = !!token;
 
     useEffect(() => {
-        if (userIsLoggedIn && session?.user?.token) {
-            fetchUserBookings();
-        }
-    }, [userIsLoggedIn, session]);
-
-    const fetchUserBookings = async () => {
-        if (!session?.user?.token) return;
-
-        setIsLoading(true);
-        setError(null);
-
-        try {
-            const data = await getBookings(session.user.token);
-            
-            if (data.data && data.data.length > 0) {
-                setBookings(data.data);
-                setHasBookings(true);
-            } else {
-                setHasBookings(false);
+        const fetchData = async () => {
+            if (!token) {
+                console.log('No token provided');
+                setIsLoading(false);
+                return;
             }
-        } catch (err) {
-            console.error('Error fetching bookings:', err);
-            const errorMessage = err instanceof Error ? err.message : 'เกิดข้อผิดพลาดที่ไม่คาดคิด';
-            setError(errorMessage);
-        } finally {
-            setIsLoading(false);
-        }
-    };
 
-    // ... rest of the component remains the same ...
+            try {
+                // Fetch user profile
+                const profileData = await fetchUserProfile(token);
+                console.log('User Profile Data:', profileData);
+                setUserData({
+                    name: profileData.name,
+                    email: profileData.email,
+                    role: profileData.role
+                });
+
+                // Fetch bookings
+                const bookingsData = await getBookings(token);
+                console.log('Raw Bookings Response:', bookingsData);
+                
+                if (bookingsData && bookingsData.data && bookingsData.data.length > 0) {
+                    console.log('Bookings Found:', bookingsData.data.length);
+                    setBookings(bookingsData.data);
+                    setHasBookings(true);
+                } else {
+                    console.log('No Bookings Found');
+                    setHasBookings(false);
+                    setBookings([]);
+                }
+            } catch (err) {
+                console.error('Fetch Error:', err);
+                const errorMessage = err instanceof Error ? err.message : 'เกิดข้อผิดพลาดที่ไม่คาดคิด';
+                setError(errorMessage);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchData();
+    }, [token]);
+
     const formatDate = (dateString: string) => {
         const date = new Date(dateString);
         return date.toLocaleDateString('th-TH', {
@@ -79,7 +100,9 @@ export default function HistoryPanel({ isLoggedIn }: HistoryPanelProps) {
 
     return (
         <div className="bg-white rounded-lg shadow p-6 h-[275px] flex flex-col">
-            <h2 className="font-medium mb-4 text-center sticky top-0 bg-white">ประวัติการจองของคุณ</h2>
+            <h2 className="font-medium mb-4 text-center sticky top-0 bg-white text-2xl">
+                {userData?.role === 'admin' ? 'ประวัติการจองทั้งหมด' : 'ประวัติการจองของท่าน'}
+            </h2>            
             
             {userIsLoggedIn ? (
                 <div className="flex-1 overflow-hidden flex flex-col">
@@ -92,7 +115,10 @@ export default function HistoryPanel({ isLoggedIn }: HistoryPanelProps) {
                             <p>{error}</p>
                             <button 
                                 className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
-                                onClick={fetchUserBookings}
+                                onClick={() => {
+                                    setIsLoading(true);
+                                    setError(null);
+                                }}
                             >
                                 ลองใหม่
                             </button>

@@ -14,5 +14,6 @@ export async function getBookings(token: string): Promise<ApiResponse> {
         throw new Error(`Failed to fetch bookings: ${response.status} ${response.statusText} - ${errorText}`);
     }
 
+
     return await response.json();
 }
