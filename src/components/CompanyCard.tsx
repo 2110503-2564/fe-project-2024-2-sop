@@ -1,33 +1,19 @@
-import Image from "next/image";
-import InteractiveCard from "./InteractiveCard"
-import Rating from "@mui/material/Rating";
+import styles from './productcard.module.css';
+import Image from 'next/image';
+import InteractiveCard from './InteractiveCard';
 
-interface CardProps {
-    venueName: string;
-    imgSrc: string;
-    rating?: number;
-    vid: string;
-    onRatingChange?: (newRating: number) => void;
-    onRemove?: () => void;
-}
-
-export default function Card({venueName, imgSrc, rating, vid, onRatingChange, onRemove}: CardProps) {
-    const handleRatingChange = (event: React.SyntheticEvent, newValue: number | null) => {
-        onRatingChange?.(newValue ?? 0);
-    };
-
+export default function CompanyCard ({companyName , imgSrc }:{companyName:string,imgSrc:string}) {
     return (
-        <InteractiveCard vid={vid} onRemove={onRemove}>
-            <div className="relative w-full h-[200px]">
-                <Image src={imgSrc} alt={venueName} width={300} height={200} className="object-cover" />
+        <InteractiveCard contentName={companyName}>
+            <div className="w-full h-[70%] relative rounded-t-lg">
+                 <Image src={imgSrc}
+                alt='Company Picture'
+                fill={true}
+                sizes="(max-width: 768px) 100vw, 500px"
+                className='object-cover rounded-t-lg'/>
             </div>
-            <div className="p-6">
-                <h2 className="text-xl mb-3 text-gray-800">{venueName}</h2>
-                {rating !== undefined && (
-                    <div onClick={(e) => e.stopPropagation()}>
-                        <Rating value={rating} onChange={handleRatingChange} id={`${venueName} Rating`} name={`${venueName} Rating`} data-testid={`${venueName} Rating`} />
-                    </div>
-                )}
+            <div className="w-full h-[15%] p-[10px]">
+                {companyName}
             </div>
         </InteractiveCard>
     );
