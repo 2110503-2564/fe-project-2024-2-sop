@@ -1,31 +1,29 @@
 import Link from "next/link";
-import Companycard from "./CompanyCard";
+import CompanyCard from "./CompanyCard";
+import { CompanyCatalogProps } from "@/libs/interfaces";
 
-export default async function CompanyCatalog({companyJson}:{companyJson:Object}){
-    const companyJsonReady = await companyJson    
-    return(
+
+
+export default function CompanyCatalog({ companyJson, selectedSize }: CompanyCatalogProps) {
+    
+    const filteredCompanies =
+        selectedSize === "All"
+            ? companyJson.data
+            : companyJson.data.filter((company) => company.company_size === selectedSize);
+
+    return (
         <>
-        Explore {companyJsonReady.count} companies in our JobFair
-        
-        <div style={{margin:"20px",display:"flex",
-                flexDirection:"row",alignContent:"space-around",
-                justifyContent:"space-around",flexWrap:"wrap"
-            }}>
+            <p className="text-gray-800 font-semibold text-lg">
+                Explore {filteredCompanies.length} companies in our JobFair
+            </p>
 
-{
-                    companyJsonReady.data.map((companyItem:Object)=>(
-                        <Link href={`/company/${companyItem.id}`}
-                        className="w-1/5">
-                        <Companycard companyName={companyItem.name} imgSrc={companyItem.company_picture}/>
-                        </Link>
-                    
-                    ))
-
-               }
-                
-               
+            <div className="flex flex-wrap justify-around m-5">
+                {filteredCompanies.map((companyItem) => (
+                    <Link href={`/company/${companyItem._id}`} key={companyItem._id} className="w-1/5">
+                        <CompanyCard companyName={companyItem.name} imgSrc={companyItem.company_picture} />
+                    </Link>
+                ))}
             </div>
-        
         </>
-    )
+    );
 }

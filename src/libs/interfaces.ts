@@ -42,14 +42,40 @@ export interface User {
     image?: string;     // Make password optional
     createdAtts?: any[];   // Make createdAtts optional
 }
+// export interface Company {
+//     _id: string;
+//     name?: string;
+//     address?: string;
+//     tel?: string;
+//     website?: string;
+//     id?: string;
+// }
+
 export interface Company {
     _id: string;
-    name?: string;
-    address?: string;
-    tel?: string;
-    website?: string;
-    id?: string;
+    name: string;
+    address: string;
+    district: string;
+    province: string;
+    country: string;
+    postalcode: string;
+    tel: string;
+    email: string;
+    website: string;
+    business_type: string;
+    description: string;
+    company_size: string;
+    company_picture: string;
 }
+
+export interface CompanyCatalogProps {
+    companyJson: {
+        count: number;
+        data: Company[];
+    };
+    selectedSize: string;
+}
+
 
 export interface InterviewSession {
     _id: string;
