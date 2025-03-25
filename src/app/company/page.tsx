@@ -22,7 +22,7 @@ export default function Companies() {
 
     return (
         <main className="text-center p-5 min-h-screen bg-gray-100">
-            <h1 className="text-2xl font-bold text-gray-800">Select Your Travel Partner</h1>
+            <h1 className="text-2xl font-bold text-gray-800">Company</h1>
 
             
             <div className="flex justify-center space-x-4 my-5">

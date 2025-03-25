@@ -17,10 +17,11 @@ export default function CompanyCatalog({ companyJson, selectedSize }: CompanyCat
                 Explore {filteredCompanies.length} companies in our JobFair
             </p>
 
-            <div className="flex flex-wrap justify-around m-5">
+            <div className="flex flex-wrap flex-col justify-around m-5">
                 {filteredCompanies.map((companyItem) => (
-                    <Link href={`/company/${companyItem._id}`} key={companyItem._id} className="w-1/5">
-                        <CompanyCard companyName={companyItem.name} imgSrc={companyItem.company_picture} />
+                    <Link href={`/company/${companyItem._id}`} key={companyItem._id} className="flex items-center justify-center my-5 ">
+                        <CompanyCard companyName={companyItem.name} imgSrc={companyItem.company_picture} description={companyItem.description}
+                        businessType={companyItem.business_type} />
                     </Link>
                 ))}
             </div>
