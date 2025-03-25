@@ -103,7 +103,7 @@ const BookingList: React.FC<BookingListProps> = ({ token }) => {
             }
             token={token}
             user={typeof booking.user === "object"
-              ? booking.user.data.name
+              ? booking.user.name
               : booking.user || "User"
 }
             onDelete={() => handleDelete(booking._id)}
