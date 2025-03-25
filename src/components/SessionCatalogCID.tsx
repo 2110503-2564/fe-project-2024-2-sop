@@ -2,7 +2,7 @@
 import { createBooking } from "@/libs/createBooking";
 import { SessionItem, SessionResponse } from "@/libs/interfaces";
 import { useSession } from "next-auth/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import SessionCard from "./SessionCard";
 import { Link } from "@mui/material";
 
@@ -11,6 +11,7 @@ export default function SessionCatalogCID({ sessionJson, companyId }: { sessionJ
     const [selectedDate, setSelectedDate] = useState<string>('2022-05-10');
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const [all, setAll] = useState<SessionItem | null>(null);
+    const [popupTop, setPopupTop] = useState<string>('50%'); // State สำหรับตำแหน่ง popup
 
     const filteredSessions = sessionJson.data.filter((sessionItem: SessionItem) => sessionItem.companiess.id === companyId);
 
@@ -53,6 +54,13 @@ export default function SessionCatalogCID({ sessionJson, companyId }: { sessionJ
         }
     };
 
+    useEffect(() => {
+        // คำนวณตำแหน่ง pop-up ใหม่ทุกครั้งที่ขนาดหน้าต่างเปลี่ยนแปลง
+        const windowHeight = window.innerHeight;
+        const calculatedTop = (windowHeight / 2) + 20; // ปรับ 20px ลงมา
+        setPopupTop(`${calculatedTop}px`);
+    }, []); // ใช้ [] เพื่อให้คำนวณครั้งเดียวตอน mount
+
     return (
         <div className="p-6">
             <div className="border-t pt-4 mt-4 overflow-y-scroll flex-1" style={{ maxHeight: 'calc(100vh - 300px)' }}>
@@ -69,8 +77,8 @@ export default function SessionCatalogCID({ sessionJson, companyId }: { sessionJ
             </div>
 
             {isPopupOpen && all && (
-                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-20 h-28 text-black flex justify-center items-center z-50"
-                    style={{ top: 'calc(50% + 250px)' }} // เพิ่ม 20px เพื่อขยับลงมา
+                <div className="absolute left-1/2 transform -translate-x-1/2 w-20 h-28 text-black flex justify-center items-center z-50"
+                    style={{ top: popupTop }} // ใช้ state popupTop
                 >
                     <div className="flex justify-center items-center h-screen">
                         <div className="relative w-96 p-6 bg-white border rounded-lg shadow-lg h-[400px]">
