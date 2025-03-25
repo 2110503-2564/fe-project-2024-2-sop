@@ -12,7 +12,7 @@ export default function Navbar() {
         signOut({ callbackUrl: '/' });
     };
 
-    const handleProtectedRoute = (e, path) => {
+    const handleProtectedRoute = (e: React.MouseEvent<HTMLAnchorElement>, path: string) => {
         if (!session) {
             e.preventDefault();
             alert("You must log in first to access this page.");

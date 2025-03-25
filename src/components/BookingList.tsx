@@ -14,21 +14,22 @@ const BookingList: React.FC<BookingListProps> = ({ token }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const [searchBy, setSearchBy] = useState<"company">("company"); // Only search by company
+
+  const fetchBooking = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const bookingData = await getBookings(token);
+      setBookings(bookingData.data);
+    } catch (err) {
+      setError("Failed to load booking data.");
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchBooking = async () => {
-      try {
-        const bookingData = await getBookings(token);
-        setBookings(bookingData.data);
-        setLoading(false);
-      } catch (err) {
-        setError("Failed to load booking data.");
-        console.error(err); // Log error to console for debugging
-        setLoading(false);
-      }
-    };
-
     fetchBooking();
   }, [token]);
 
@@ -42,7 +43,10 @@ const BookingList: React.FC<BookingListProps> = ({ token }) => {
   };
 
   const filteredBookings = bookings.filter((booking) => {
-    const searchTarget = booking.company?.name;
+    const searchTarget =
+      typeof booking.company === "object"
+        ? booking.company.name
+        : booking.company;
     return searchTarget?.toLowerCase().includes(searchQuery.toLowerCase());
   });
 
@@ -55,12 +59,7 @@ const BookingList: React.FC<BookingListProps> = ({ token }) => {
       <div className="p-4 text-red-500">
         {error}{" "}
         <button
-          onClick={() => {
-            setLoading(true);
-            setError(null);
-            // Retry fetching data
-            fetchBooking();
-          }}
+          onClick={fetchBooking}
           className="text-blue-500 underline"
         >
           Retry
@@ -92,13 +91,21 @@ const BookingList: React.FC<BookingListProps> = ({ token }) => {
           <BookingItem
             key={booking._id}
             id={booking._id}
-            title={booking.company?.name || "Company"}
+            title={
+              typeof booking.company === "object"
+                ? booking.company.name
+                : booking.company || "Company"
+            }
             description={
-              booking.interviewSession?.sessionName ||
-              "Session Info Unavailable"
+              typeof booking.interviewSession === "object"
+                ? booking.interviewSession.sessionName
+                : "Session Info Unavailable"
             }
             token={token}
-            user={booking.user?.name || "User"}
+            user={typeof booking.user === "object"
+              ? booking.user.data.name
+              : booking.user || "User"
+}
             onDelete={() => handleDelete(booking._id)}
           />
         ))

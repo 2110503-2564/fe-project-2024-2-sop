@@ -72,7 +72,7 @@ export default function BookingCard({ token, data }: { token: string; data: stri
       <div className="text-xl font-bold mb-5">Booking Information</div>
 
       {/* Interview Session at the top (bigger text) */}
-      {booking && booking.interviewSession && (
+      {booking && typeof booking.interviewSession === "object" && (
         <div className="text-2xl font-bold text-blue-600 mb-5">
           {booking.interviewSession.sessionName}
         </div>
@@ -85,23 +85,24 @@ export default function BookingCard({ token, data }: { token: string; data: stri
             <strong>Booking Date:</strong> {formatDate(booking.bookingDate)}
           </div>
           <div>
-            <strong>User Name:</strong> {booking.user ? booking.user.name : "N/A"}
+            <strong>User Name:</strong>   {booking.user && typeof booking.user === "object" ? booking.user.data.name : "N/A"}
+
           </div>
           <div>
-            <strong>User Tel:</strong> {booking.user ? booking.user.tel : "N/A"}
+            <strong>User Tel:</strong> {booking.user && typeof booking.user === "object" ? booking.user.data.tel : "N/A"}
           </div>
           <div>
-            <strong>Company Name:</strong> {booking.company ? booking.company.name : "N/A"}
+            <strong>Company Name:</strong> {booking.company && typeof booking.company === "object" ? booking.company.name : "N/A"}
           </div>
           <div>
-            <strong>Company Address:</strong> {booking.company ? booking.company.address : "N/A"}
+            <strong>Company Address:</strong> {booking.company && typeof booking.company === "object" ? booking.company.address : "N/A"}
           </div>
           <div>
-            <strong>Company Tel:</strong> {booking.company ? booking.company.tel : "N/A"}
+            <strong>Company Tel:</strong> {booking.company && typeof booking.company === "object" ? booking.company.tel : "N/A"}
           </div>
           <div>
             <strong>Company Website:</strong>{" "}
-            {booking.company && booking.company.website ? (
+            {booking.company && typeof booking.company === "object" && booking.company.website ? (
               <a
                 href={booking.company.website}
                 target="_blank"
@@ -114,16 +115,17 @@ export default function BookingCard({ token, data }: { token: string; data: stri
               "N/A"
             )}
             {/* Display start and end date below the select dropdown */}
-            {booking.interviewSession && (
+            {booking?.interviewSession && typeof booking.interviewSession === "object" && (
               <div className="mt-5">
                 <div>
-                  <strong>Start Date:</strong> {formatDate(booking.interviewSession.startDate)}
+                  <strong>Start Date:</strong> {booking.interviewSession.startDate ? formatDate(booking.interviewSession.startDate) : "N/A"}
                 </div>
                 <div>
-                  <strong>End Date:</strong> {formatDate(booking.interviewSession.endDate)}
+                  <strong>End Date:</strong> {booking.interviewSession.endDate ? formatDate(booking.interviewSession.endDate) : "N/A"}
                 </div>
               </div>
             )}
+
           </div>
         </div>
       )}

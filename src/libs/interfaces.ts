@@ -83,10 +83,13 @@ export interface CompanyCatalogProps {
 
 export interface InterviewSession {
     _id: string;
-    sessionName?: string;
+    sessionName: string;
     jobPosition?: string;
     jobDescription?: string;
     id?: string;
+    startDate?: string;
+    endDate?: string;
+
 }
 
 export interface Booking {
