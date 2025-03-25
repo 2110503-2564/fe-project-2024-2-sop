@@ -104,6 +104,7 @@ export interface ApiResponse {
     count: number;
     pagination: object;
     data: Booking[];
+    message: string;
 }
 
 export interface SessionItem {
@@ -130,5 +131,12 @@ export interface SessionCompanyContact{
 
 export interface SessionResponse {
     success: boolean;
-    data: SessionItem;
+    data: SessionItem[];
+}
+
+export interface input {
+    company: string;
+    user: string;
+    bookingDate: string;
+    interviewSession: string;
 }

@@ -2,11 +2,15 @@
 import Link from "next/link";
 import SessionCard from "./SessionCard";
 import { SessionItem, SessionResponse } from "@/libs/interfaces.js";
+import { useSession } from "next-auth/react";
 import React, { useState } from 'react';
+import { createBooking } from "@/libs/createBooking";
 
 export default function SessionCatalog({ sessionJson }: { sessionJson: SessionResponse }) {
     const sessionJsonReady = sessionJson;
-
+    
+    const { data: session } = useSession();
+    const [selectedDate, setSelectedDate] = useState<string>('2022-05-10');
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const [all, setAll] = useState<SessionItem | null>(null);
 
@@ -20,6 +24,38 @@ export default function SessionCatalog({ sessionJson }: { sessionJson: SessionRe
     const handleClosePopup = () => {
         setAll(null);
         setIsPopupOpen(false);
+    };
+
+    const handleBooking = async () => {
+        if (!all) return;
+        try {
+
+            const bookingData = {
+                interviewSession: all.id,
+                user: "",
+                company: all.companiess.id,
+                bookingDate: selectedDate
+            };
+
+            if(session == null)return;
+            
+            const token = session.user.token;
+
+        
+            
+            const response = await createBooking(token, bookingData);
+
+            if (response.success) {
+                alert("Booking successful!");
+            } else {
+                alert(`Booking failed: ${response.message}`);
+            }
+        } catch (error) {
+            console.error("Booking error:", error);
+            alert("An error occurred while booking.");
+        } finally {
+            handleClosePopup();
+        }
     };
 
     return (
@@ -55,11 +91,14 @@ export default function SessionCatalog({ sessionJson }: { sessionJson: SessionRe
 
                             <div className="flex flex-col gap-4">
                                 <label htmlFor="date" className="font-medium">Select Date</label>
-                                <input
-                                    type="date"
+                                <select
                                     id="date"
                                     className="p-2 border rounded"
-                                />
+                                >
+                                    <option value="2022-05-10">May 10, 2022</option>
+                                    <option value="2022-05-11">May 11, 2022</option>
+                                    <option value="2022-05-12">May 12, 2022</option>
+                                </select>
                             </div>
 
                             <div className="absolute bottom-4 left-4 right-4 flex justify-between">
@@ -70,11 +109,24 @@ export default function SessionCatalog({ sessionJson }: { sessionJson: SessionRe
                                     Back
                                 </button>
 
-                                <button className="px-6 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+                                {session ? (
+                                    <button
+                                        onClick={handleBooking}
+                                        className={'px-6 py-2 text-white rounded bg-blue-500 hover:bg-blue-600'}
+                                    >
                                     Book!!!
-                                </button>
+                                    </button>
+                                    ) : (
+                                    <Link href="/api/auth/signin">
+                                        <button
+                                        className={'px-6 py-2 text-white rounded bg-blue-500 hover:bg-blue-600'}
+                                        >
+                                        Book!!!
+                                        </button>
+                                    </Link>
+                                )}
                             </div>
-                        </div>
+                        </div>  
                     </div>
                 </div>
             )}
