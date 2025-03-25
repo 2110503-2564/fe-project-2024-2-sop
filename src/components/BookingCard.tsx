@@ -85,11 +85,11 @@ export default function BookingCard({ token, data }: { token: string; data: stri
             <strong>Booking Date:</strong> {formatDate(booking.bookingDate)}
           </div>
           <div>
-            <strong>User Name:</strong>   {typeof booking.user === "object" && booking.user.data ? booking.user.data.name : "N/A"}
+            <strong>User Name:</strong>   {typeof booking.user === "object" && booking.user ? booking.user.name : "N/A"}
 
           </div>
           <div>
-            <strong>User Tel:</strong> {typeof booking.user === "object"&&booking.user.data   ? booking.user.data.tel : "N/A"}
+            <strong>User Tel:</strong> {typeof booking.user === "object"&&booking.user.   ? booking.user.tel : "N/A"}
           </div>
           <div>
             <strong>Company Name:</strong> {booking.company && typeof booking.company === "object" ? booking.company.name : "N/A"}

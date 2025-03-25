@@ -44,6 +44,8 @@ export interface User {
         image?: string;
         createdAt?: string;
     };
+    name: string;
+    tel: string;
 }
 
 // export interface Company {
