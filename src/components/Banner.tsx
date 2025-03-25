@@ -121,7 +121,7 @@ export default function Banner() {
             <div className="absolute inset-0 flex flex-col justify-center items-center bg-black bg-opacity-50 text-white text-center px-5 z-5">
                 <h1 className="text-4xl mb-4 font-bold text-shadow-lg">Connect with Your Future Career</h1>
                 <p className="text-xl mb-2 text-shadow-md">Register Now for Our Annual Job Fair</p>
-                <p className="text-lg text-shadow-md">May 10-12, 2022 </p>
+                <p className="text-lg text-shadow-md">May 10-13, 2022 </p>
             </div>
         </div>
     );
