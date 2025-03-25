@@ -89,7 +89,7 @@ export default function BookingCard({ token, data }: { token: string; data: stri
 
           </div>
           <div>
-            <strong>User Tel:</strong> {typeof booking.user === "object"&&booking.user.   ? booking.user.tel : "N/A"}
+            <strong>User Tel:</strong> {typeof booking.user === "object"&&booking.user   ? booking.user.tel : "N/A"}
           </div>
           <div>
             <strong>Company Name:</strong> {booking.company && typeof booking.company === "object" ? booking.company.name : "N/A"}
