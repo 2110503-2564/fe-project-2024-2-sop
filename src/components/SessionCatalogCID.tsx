@@ -122,7 +122,7 @@ export default function SessionCatalogCID({ sessionJson, companyId }: { sessionJ
                                         Book!!!
                                     </button>
                                 ) : (
-                                    <Link href="/api/auth/signin">
+                                    <Link href="/login">
                                         <button
                                             className={'px-6 py-2 text-white rounded bg-blue-500 hover:bg-blue-600'}
                                         >

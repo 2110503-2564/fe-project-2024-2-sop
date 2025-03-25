@@ -6,7 +6,7 @@ export default function LoginPanel() {
     const router = useRouter();
 
     return (
-        <div className="bg-white rounded-lg shadow p-6 flex flex-col justify-center min-h-[300px]">
+        <div className="bg-white rounded-lg shadow p-6 flex flex-col justify-center min-h-[270px]">
             <div>
                 <h2 className="text-center mb-8">กรุณา login หรือ สมัคร account</h2>
                 <div className="flex justify-center space-x-4">
