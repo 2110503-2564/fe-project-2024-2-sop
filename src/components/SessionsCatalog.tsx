@@ -74,19 +74,20 @@ export default function SessionCatalog({ sessionJson }: { sessionJson: SessionRe
         });
     }, [sessionJsonReady.data, searchQuery, filterType]);
 
+    // Ensure all parentheses and blocks are properly closed before this line
     return (
         <div className="p-6 relative">
             {/* Search and filter controls on the right */}
-            <div className="absolute top-8 right-16 p-6">
+            <div className="absolute top-8 right-4 p-6">
                 <div className="mb-4 flex gap-4 flex-col items-end">
                     <input
                         type="text"
                         placeholder="Search..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="p-2 w-80 border rounded"
+                        className="p-1.5 w-64 border rounded" 
                     />
-                    <div className="flex gap-2">
+                    <div className="flex gap-2 text-sm">
                         <label>
                             <input
                                 type="radio"
