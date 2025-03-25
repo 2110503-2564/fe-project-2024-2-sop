@@ -23,7 +23,8 @@ export default function UserCard({ UserProfile }: { UserProfile: User }) {
             
             <div className="text-center mt-4">
                 <h2 className="text-xl font-semibold text-gray-800">{UserProfile.data.name}</h2>
-                <p className="text-gray-600">{UserProfile.data.email}</p>
+                <p className="text-gray-600">Email : {UserProfile.data.email}</p>
+                <p className="text-gray-600">Tel : {UserProfile.data.tel}</p>
                 <span className="px-4 py-1 mt-2 inline-block bg-blue-100 text-blue-600 rounded-full text-sm">{UserProfile.data.role}</span>
             </div>
         </div>
