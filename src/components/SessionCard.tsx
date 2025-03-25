@@ -9,7 +9,7 @@ export default function SessionCard({ sessionItem, popOpen, setAll }: { sessionI
     };
 
     return (
-        <div className="relative bg-white rounded-lg shadow-md p-4 border border-gray-200 w-4/5 mx-auto">
+        <div className="relative bg-white rounded-lg shadow-md p-4 border border-gray-200 w-3/5 mx-auto">
             <div className="absolute top-0 right-0 p-2">
                 <button
                     onClick={handleBookClick}
