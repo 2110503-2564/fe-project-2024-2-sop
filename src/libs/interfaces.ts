@@ -103,6 +103,12 @@ export interface ApiResponse {
     message: string;
 }
 
+export interface ApiResponsesolo {
+    success: boolean;
+    data: Booking;
+    message: string;
+}
+
 export interface SessionItem {
     _id: string;
     sessionName: string;

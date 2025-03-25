@@ -1,4 +1,4 @@
-import { ApiResponse } from '@/libs/interfaces';
+import { ApiResponse } from './interfaces';
 
 export async function getBookings(token: string): Promise<ApiResponse> {
     const response = await fetch('http://localhost:5000/api/v1/bookings', {
@@ -14,6 +14,7 @@ export async function getBookings(token: string): Promise<ApiResponse> {
         throw new Error(`Failed to fetch bookings: ${response.status} ${response.statusText} - ${errorText}`);
     }
 
-
-    return await response.json();
+    const data = await response.json();
+    console.log("Fetched Booking Data:", JSON.stringify(data, null, 2)); // Inspect data structure
+    return data;
 }

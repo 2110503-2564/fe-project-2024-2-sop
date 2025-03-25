@@ -98,6 +98,7 @@ export default function SessionCatalog({ sessionJson }: { sessionJson: SessionRe
                                     <option value="2022-05-10">May 10, 2022</option>
                                     <option value="2022-05-11">May 11, 2022</option>
                                     <option value="2022-05-12">May 12, 2022</option>
+                                    <option value="2022-05-13">May 13, 2022</option>
                                 </select>
                             </div>
 
