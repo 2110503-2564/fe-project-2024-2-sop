@@ -4,7 +4,7 @@ import { ApiResponse,input } from '@/libs/interfaces';
 export async function createBooking(token: string, all:input): Promise<ApiResponse> {
     console.log(all);
 
-    const response = await fetch('http://localhost:5000/api/v1/bookings', {
+    const response = await fetch('https://sop-job-fair-backend.vercel.app/api/v1/bookings', {
         method: 'POST',
         headers: {
             'Authorization': `Bearer ${token}`,

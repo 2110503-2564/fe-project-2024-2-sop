@@ -18,7 +18,7 @@ export default function ProfilePage() {
             throw new Error('Unauthorized');
           }
       
-          const response = await fetch(`http://localhost:5000/api/v1/auth/updatedetails`, {
+          const response = await fetch(`https://sop-job-fair-backend.vercel.app/api/v1/auth/updatedetails`, {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json',

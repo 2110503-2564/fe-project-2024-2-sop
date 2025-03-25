@@ -101,7 +101,7 @@ export default function HistoryPanel({ user }: HistoryPanelProps) {
     return (
         <div className="bg-white rounded-lg shadow p-6 h-[275px] flex flex-col">
             <h2 className="font-medium mb-4 text-center sticky top-0 bg-white text-2xl">
-                {userData?.role === 'admin' ? 'ประวัติการจองทั้งหมด' : 'ประวัติการจองของท่าน'}
+                {userData?.role === 'admin' ? 'การจองทั้งหมด' : 'การจองของท่าน'}
             </h2>            
             
             {userIsLoggedIn ? (
@@ -136,7 +136,7 @@ export default function HistoryPanel({ user }: HistoryPanelProps) {
                                                 {getSessionTitle(booking)}
                                             </span>
                                             <span className="text-sm text-gray-500">
-                                                วันที่จอง: {formatDate(booking.bookingDate)}
+                                                วันจอง: {formatDate(booking.bookingDate)}
                                             </span>
                                         </div>
                                     </li>

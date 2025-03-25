@@ -13,7 +13,7 @@ export async function POST(req: Request) {
       );
     }
 
-    const response = await fetch("http://localhost:5000/api/v1/auth/register", {
+    const response = await fetch("https://sop-job-fair-backend.vercel.app/api/v1/auth/register", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

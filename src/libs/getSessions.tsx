@@ -1,7 +1,7 @@
 import { SessionCompanyContact, SessionItem, SessionResponse } from "./interfaces";
 
 export default async function getSessions(): Promise<SessionResponse> {
-    const url = "http://localhost:5000/api/v1/sessions/";
+    const url = "https://sop-job-fair-backend.vercel.app/api/v1/sessions/";
 
 
     await new Promise(resolve => setTimeout(resolve, 300));

@@ -87,7 +87,7 @@ export default function UserCard({ UserProfile, onUpdateUser }: {
             <input
               type="email"
               name="email"
-              value={formData.email}
+              value={formData.email}    
               onChange={handleChange}
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border"
               required

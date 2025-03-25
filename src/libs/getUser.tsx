@@ -11,7 +11,7 @@ interface UserProfile {
 }
 
 export const fetchUserProfile = async (token: string): Promise<UserProfile> => {
-  const response = await fetch("http://localhost:5000/api/v1/auth/me", {
+  const response = await fetch("https://sop-job-fair-backend.vercel.app/api/v1/auth/me", {
     headers: { Authorization: `Bearer ${token}` },
   });
 
