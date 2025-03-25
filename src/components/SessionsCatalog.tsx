@@ -1,18 +1,20 @@
-'use client'
+'use client';
 import Link from "next/link";
 import SessionCard from "./SessionCard";
 import { SessionItem, SessionResponse } from "@/libs/interfaces.js";
 import { useSession } from "next-auth/react";
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { createBooking } from "@/libs/createBooking";
 
 export default function SessionCatalog({ sessionJson }: { sessionJson: SessionResponse }) {
     const sessionJsonReady = sessionJson;
-    
     const { data: session } = useSession();
     const [selectedDate, setSelectedDate] = useState<string>('2022-05-10');
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const [all, setAll] = useState<SessionItem | null>(null);
+
+    const [searchQuery, setSearchQuery] = useState('');
+    const [filterType, setFilterType] = useState<'company' | 'session' | 'position' | null>('company'); // State to track selected filter type
 
     console.log(isPopupOpen);
 
@@ -29,7 +31,6 @@ export default function SessionCatalog({ sessionJson }: { sessionJson: SessionRe
     const handleBooking = async () => {
         if (!all) return;
         try {
-
             const bookingData = {
                 interviewSession: all.id,
                 user: "",
@@ -37,12 +38,10 @@ export default function SessionCatalog({ sessionJson }: { sessionJson: SessionRe
                 bookingDate: selectedDate
             };
 
-            if(session == null)return;
-            
+            if (session == null) return;
+
             const token = session.user.token;
 
-        
-            
             const response = await createBooking(token, bookingData);
 
             if (response.success) {
@@ -58,11 +57,67 @@ export default function SessionCatalog({ sessionJson }: { sessionJson: SessionRe
         }
     };
 
+    // Filter logic based on selected criteria and search query
+    const filteredSessions = useMemo(() => {
+        return sessionJsonReady.data.filter((sessionItem: SessionItem) => {
+            const query = searchQuery.toLowerCase();
+            if (filterType === 'company') {
+                return sessionItem.companiess.name.toLowerCase().includes(query);
+            }
+            if (filterType === 'session') {
+                return sessionItem.sessionName.toLowerCase().includes(query);
+            }
+            if (filterType === 'position') {
+                return sessionItem.jobPosition.toLowerCase().includes(query);
+            }
+            return false;
+        });
+    }, [sessionJsonReady.data, searchQuery, filterType]);
+
     return (
-        <div className="p-6">
+        <div className="p-6 relative">
+            {/* Search and filter controls on the right */}
+            <div className="absolute top-8 right-16 p-6">
+                <div className="mb-4 flex gap-4 flex-col items-end">
+                    <input
+                        type="text"
+                        placeholder="Search..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="p-2 w-80 border rounded"
+                    />
+                    <div className="flex gap-2">
+                        <label>
+                            <input
+                                type="radio"
+                                checked={filterType === 'company'}
+                                onChange={() => setFilterType('company')}
+                            />
+                            Company
+                        </label>
+                        <label>
+                            <input
+                                type="radio"
+                                checked={filterType === 'session'}
+                                onChange={() => setFilterType('session')}
+                            />
+                            Session
+                        </label>
+                        <label>
+                            <input
+                                type="radio"
+                                checked={filterType === 'position'}
+                                onChange={() => setFilterType('position')}
+                            />
+                            Job Position
+                        </label>
+                    </div>
+                </div>
+            </div>
+
             <div className="border-t pt-4 mt-4 overflow-y-scroll flex-1" style={{ maxHeight: 'calc(100vh - 300px)' }}>
                 <div className="flex flex-col gap-4">
-                    {sessionJsonReady.data.map((sessionItem: SessionItem) => (
+                    {filteredSessions.map((sessionItem: SessionItem) => (
                         <SessionCard
                             key={sessionItem.id}
                             sessionItem={sessionItem}
@@ -73,6 +128,7 @@ export default function SessionCatalog({ sessionJson }: { sessionJson: SessionRe
                 </div>
             </div>
 
+            {/* Popup booking form */}
             {isPopupOpen && all && (
                 <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-20 h-28 text-black flex justify-center items-center z-50">
                     <div className="flex justify-center items-center h-screen">
@@ -115,19 +171,19 @@ export default function SessionCatalog({ sessionJson }: { sessionJson: SessionRe
                                         onClick={handleBooking}
                                         className={'px-6 py-2 text-white rounded bg-blue-500 hover:bg-blue-600'}
                                     >
-                                    Book!!!
+                                        Book!!!
                                     </button>
-                                    ) : (
+                                ) : (
                                     <Link href="/login">
                                         <button
-                                        className={'px-6 py-2 text-white rounded bg-blue-500 hover:bg-blue-600'}
+                                            className={'px-6 py-2 text-white rounded bg-blue-500 hover:bg-blue-600'}
                                         >
-                                        Book!!!
+                                            Book!!!
                                         </button>
                                     </Link>
                                 )}
                             </div>
-                        </div>  
+                        </div>
                     </div>
                 </div>
             )}
